@@ -16,20 +16,19 @@ public class H2DataInitializer {
     @Profile("h2") //  SPRING_PROFILES_ACTIVE=h2
     CommandLineRunner initUser(UserRepository userRepository) {
         return args -> {
-            UUID id = UUID.fromString("11111111-1111-1111-1111-111111111111");
+//            UUID id = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
-            if (userRepository.findById(id).isEmpty()) {
+
                 User user = new User();
-                user.setId(id);
                 user.setName("Test User");
                 user.setEmail("test@test.com");
                 user.setPassword("123");
 
                 userRepository.save(user);
                 System.out.println(">>> Default H2 test user inserted");
-            } else {
-                System.out.println(">>> User already exists, skipping insert");
-            }
+
+
+
         };
     }
 }
