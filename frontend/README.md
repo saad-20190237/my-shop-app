@@ -24,5 +24,5 @@ VITE_API_BASE=http://localhost:8080/api
 ```
 
 ## Notes
-- Uses a fake `USER_ID = 1` for demo.
+- Uses a fake `USER_ID = 11111111-1111-1111-1111-111111111111` for demo.
 - Endpoints used should match the backend described in the task.
