@@ -2,13 +2,26 @@ import axios from "axios";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8080/api";
 
-
-const CURRENT_USER_ID = "11111111-1111-1111-1111-111111111111";
-
 const api = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
 });
+
+// Add Authorization header to all requests
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Get current user ID from localStorage
+const getCurrentUserId = () => localStorage.getItem("userId") || "";
+
+// ------------ Auth ------------
+export const login = (email: string, password: string) =>
+  api.post("/auth/login", { email, password });
 
 // ------------ Products ------------
 export const getProducts = () => api.get("/products");
@@ -29,26 +42,25 @@ export const updateProduct = (
 export const deleteProduct = (id: string) => api.delete(`/products/${id}`);
 
 // ------------ Cart ------------
-export const getCart = () => api.get(`/cart/${CURRENT_USER_ID}`);
+export const getCart = () => api.get(`/cart/${getCurrentUserId()}`);
 
 export const addToCart = (productId: string, quantity: number = 1) =>
   api.post("/cart", {
-    userId: CURRENT_USER_ID,
+    userId: getCurrentUserId(),
     productId,
     quantity,
   });
 
 export const updateCartItem = (itemId: string, quantity: number) =>
-  api.put(`/cart/${CURRENT_USER_ID}/item/${itemId}`, { quantity });
+  api.put(`/cart/${getCurrentUserId()}/item/${itemId}`, { quantity });
 
 export const deleteCartItem = (itemId: string) =>
-  api.delete(`/cart/${CURRENT_USER_ID}/item/${itemId}`);
+  api.delete(`/cart/${getCurrentUserId()}/item/${itemId}`);
 
 // ------------ Orders ------------
 export const placeOrder = () =>
-  api.post(`/orders/${CURRENT_USER_ID}`);
+  api.post(`/orders/${getCurrentUserId()}`);
 
-
-export const getOrders = () => api.get(`/orders/${CURRENT_USER_ID}`);
+export const getOrders = () => api.get(`/orders/${getCurrentUserId()}`);
 
 export default api;

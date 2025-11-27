@@ -4,6 +4,7 @@ import com.example.myshopapp.dto.ProductRequestDTO;
 import com.example.myshopapp.dto.ProductResponseDTO;
 import com.example.myshopapp.service.Impl.ProductServiceImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,18 +34,21 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductResponseDTO createProduct(@RequestBody ProductRequestDTO productRequest)
     {
        return productService.createProduct(productRequest);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductResponseDTO updateProduct(@PathVariable("id") UUID productId, @RequestBody ProductRequestDTO productRequestDTO)
     {
        return productService.updateProduct(productId , productRequestDTO);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable  UUID id)
     {
         productService.deleteProduct(id);

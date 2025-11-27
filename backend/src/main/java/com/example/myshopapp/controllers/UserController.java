@@ -15,7 +15,7 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    
+
     @GetMapping("/default")
     public UserIdResponseDTO getDefaultUser() {
         User user = userRepository.findByEmail("test@test.com")
